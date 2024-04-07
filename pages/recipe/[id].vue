@@ -94,7 +94,7 @@ let isVegan = metadata?.vegan === "true";
               target="_blank"
               :href="`/recipes/${getFilename(metadata.import_path)}.cook`"
             >
-              Download .cook
+              Download .cook ↓
             </a>
           </div>
           <!-- </ul> -->
