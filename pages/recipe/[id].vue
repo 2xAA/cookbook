@@ -21,6 +21,7 @@ function stripImportPath(object) {
   const obj = { ...object };
   delete obj.import_path;
   delete obj.source;
+  delete obj.time;
   return obj;
 }
 
@@ -42,6 +43,17 @@ function addRecipeToList() {
 const addToListButtonText = computed(() =>
   hasRecipeInList.value ? "Added to List" : "Add to List"
 );
+
+let hours;
+let minutes;
+let hasTime = false;
+if ("time" in metadata) {
+  hasTime = true;
+  hours = Math.floor(metadata.time / 60);
+  minutes = metadata.time % 60;
+}
+
+let isVegan = metadata?.vegan === "true";
 </script>
 
 <template>
@@ -68,19 +80,24 @@ const addToListButtonText = computed(() =>
           </button>
         </r-cell>
         <r-cell span="1-2" span-s="row">
-          <ul style="list-style: none">
-            <li v-for="(value, key) in stripImportPath(metadata)">
+          <!-- <ul style="list-style: none"> -->
+          <!-- <li v-for="(value, key) in stripImportPath(metadata)">
               {{ key }}: {{ value }}
-            </li>
-            <li>
-              <a
-                target="_blank"
-                :href="`/recipes/${getFilename(metadata.import_path)}.cook`"
-              >
-                Download .cook
-              </a>
-            </li>
-          </ul>
+            </li> -->
+          <div v-if="isVegan">Vegan</div>
+          <div v-if="hasTime">
+            Time: <span v-if="!!hours">{{ hours }}h </span>
+            <span v-if="minutes > 0">{{ minutes }}m</span>
+          </div>
+          <div>
+            <a
+              target="_blank"
+              :href="`/recipes/${getFilename(metadata.import_path)}.cook`"
+            >
+              Download .cook
+            </a>
+          </div>
+          <!-- </ul> -->
 
           <h2>Ingredients</h2>
           <ul>
