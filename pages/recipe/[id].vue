@@ -86,7 +86,7 @@ let isVegan = metadata?.vegan === "true";
             </li> -->
           <div v-if="isVegan">Vegan</div>
           <div v-if="hasTime">
-            Time: <span v-if="!!hours">{{ hours }}h </span>
+            ⌚︎ <span v-if="!!hours">{{ hours }}h </span>
             <span v-if="minutes > 0">{{ minutes }}m</span>
           </div>
           <div>
