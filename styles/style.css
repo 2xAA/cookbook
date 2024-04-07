@@ -1,0 +1,87 @@
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #020202;
+    --foreground-color-rgb: 250, 250, 250;
+  }
+
+  .h1 > a:hover,
+  .h2 > a:hover,
+  .h3 > a:hover,
+  .h4 > a:hover,
+  .h5 > a:hover,
+  .h6 > a:hover,
+  h1 > a:hover,
+  h2 > a:hover,
+  h3 > a:hover,
+  h4 > a:hover,
+  h5 > a:hover,
+  h6 > a:hover {
+    text-decoration: underline;
+    -webkit-text-decoration: underline rgba(255, 255, 255, 0.3);
+    text-decoration: underline rgba(255, 255, 255, 0.3);
+    color: inherit;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  :root {
+    --fontSize: calc(100vw / 30);
+  }
+}
+
+@media only screen and (max-device-width: 812px) and (orientation: landscape) {
+  :root {
+    --fontSize: 1.7vw;
+  }
+}
+
+:root {
+  --fontSize: 16px;
+}
+
+input[type="search"] {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: var(--h2-size);
+  line-height: calc(var(--lineHeight) * 2);
+  margin-left: calc(var(--h2-size) / -26);
+  margin-bottom: var(--lineHeight);
+  background: none;
+  border: none;
+  border-bottom: 2px solid var(--foreground-color);
+  color: var(--foreground-color);
+  max-width: 100%;
+  border-radius: 0;
+}
+
+button {
+  background: none;
+  display: inline-block;
+  padding: 0.5rem 0.8rem 0.5rem 1rem;
+  border: 0.1rem solid rgba(var(--foreground-color-rgb), 1);
+  border-radius: 0.2rem;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+  color: var(--foreground-color);
+  text-decoration: none;
+}
+
+button:disabled {
+  border: 0.1rem solid rgba(var(--foreground-color-rgb), 0.25);
+  color: rgba(var(--foreground-color-rgb), 0.25);
+}
+
+button > * {
+  padding: 0;
+}
+
+.list-button-container {
+  text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .list-button-container {
+    text-align: left;
+  }
+}
