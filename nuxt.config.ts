@@ -2,6 +2,13 @@
 import cooklang from "vite-plugin-cooklang";
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: "en",
+      },
+    },
+  },
   devtools: { enabled: true },
   modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
   vite: {
