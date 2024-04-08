@@ -29,7 +29,7 @@ const recipes = computed(() => {
       <h3><NuxtLink to="/shopping-list">List →</NuxtLink></h3>
     </r-cell>
     <r-cell span="row">
-      <input type="search" v-model="searchTerm" />
+      <input aria-label="Search" type="search" v-model="searchTerm" />
     </r-cell>
     <r-cell span="row" v-if="!recipes.length">
       <h2>No recipes found for “{{ searchTerm }}”</h2>

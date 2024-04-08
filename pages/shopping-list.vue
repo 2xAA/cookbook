@@ -28,7 +28,12 @@ function filter(ingredients = []) {
       </r-cell>
       <r-cell span="row">
         <h1>List</h1>
-        <input type="search" v-model="searchTerm" v-if="store.list.length" />
+        <input
+          aria-label="Search"
+          type="search"
+          v-model="searchTerm"
+          v-if="store.list.length"
+        />
       </r-cell>
     </r-grid>
 
