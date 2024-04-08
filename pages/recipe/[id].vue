@@ -53,7 +53,8 @@ if ("time" in metadata) {
   minutes = metadata.time % 60;
 }
 
-let isVegan = metadata?.vegan === "true";
+const isVegan = metadata?.vegan === "true";
+const hasSource = !!metadata?.source;
 </script>
 
 <template>
@@ -80,14 +81,13 @@ let isVegan = metadata?.vegan === "true";
           </button>
         </r-cell>
         <r-cell span="1-2" span-s="row">
-          <!-- <ul style="list-style: none"> -->
-          <!-- <li v-for="(value, key) in stripImportPath(metadata)">
-              {{ key }}: {{ value }}
-            </li> -->
           <div v-if="isVegan">Vegan</div>
           <div v-if="hasTime">
             ⌚︎ <span v-if="!!hours">{{ hours }}h </span>
             <span v-if="minutes > 0">{{ minutes }}m</span>
+          </div>
+          <div v-if="hasSource">
+            <a target="_blank" :href="metadata.source"> Source ↗ </a>
           </div>
           <div>
             <a
