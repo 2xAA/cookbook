@@ -53,6 +53,15 @@ if ("time" in metadata) {
 
 const isVegan = metadata?.vegan === "true";
 const hasSource = !!metadata?.source;
+
+function bindWrapper(item) {
+  const props = { ...item };
+  if (item.type === "ingredient") {
+    props.underline = true;
+  }
+
+  return props;
+}
 </script>
 
 <template>
@@ -99,14 +108,8 @@ const hasSource = !!metadata?.source;
 
           <h2>Ingredients</h2>
           <ul>
-            <li v-for="{ name, quantity, units } in ingredients">
-              <span class="quantity">{{ quantity }}</span>
-              <span class="units">{{
-                units.length > 2 ? ` ${units}` : units
-              }}</span>
-
-              {{ !units && typeof quantity === "number" ? "×" : "" }}
-              {{ name }}
+            <li v-for="ingredient in ingredients">
+              <Ingredient v-bind="ingredient" />
             </li>
           </ul>
 
@@ -125,7 +128,7 @@ const hasSource = !!metadata?.source;
               <component
                 v-for="item in step"
                 :is="stepsComponents[item.type]"
-                v-bind="item"
+                v-bind="bindWrapper(item)"
               ></component>
             </li>
           </ol>

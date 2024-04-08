@@ -19,8 +19,12 @@ function filter(ingredients = []) {
   );
 }
 
+const collator = new Intl.Collator("en", {
+  numeric: true,
+  sensitivity: "base",
+});
 function sort(something, key = "name") {
-  return something.sort((a, b) => a[key].localeCompare(b[key]));
+  return something.sort((a, b) => collator.compare(a[key], b[key]));
 }
 </script>
 
@@ -75,12 +79,7 @@ function sort(something, key = "name") {
                 </div>
               </r-cell>
               <r-cell span="5-8">
-                <span class="quantity">{{ ingredient.quantity }}</span>
-                <span class="units">{{
-                  ingredient.units.length > 2
-                    ? ` ${ingredient.units}`
-                    : ingredient.units
-                }}</span>
+                <IngredientQuantity v-bind="ingredient" />
               </r-cell>
             </r-grid>
           </label>
