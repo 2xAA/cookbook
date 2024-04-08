@@ -72,6 +72,11 @@ function filter(ingredients = []) {
               </r-cell>
               <r-cell span="5-8">
                 <span class="quantity">{{ ingredient.quantity }}</span>
+                <span class="units">{{
+                  ingredient.units.length > 2
+                    ? ` ${ingredient.units}`
+                    : ingredient.units
+                }}</span>
               </r-cell>
             </r-grid>
           </label>

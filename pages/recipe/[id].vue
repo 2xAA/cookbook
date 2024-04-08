@@ -102,7 +102,11 @@ const hasSource = !!metadata?.source;
           <h2>Ingredients</h2>
           <ul>
             <li v-for="{ name, quantity, units } in ingredients">
-              {{ quantity }}{{ units }}
+              <span class="quantity">{{ quantity }}</span>
+              <span class="units">{{
+                units.length > 2 ? ` ${units}` : units
+              }}</span>
+
               {{ !units && typeof quantity === "number" ? "×" : "" }}
               {{ name }}
             </li>
