@@ -30,14 +30,12 @@ const recipe = store.getRecipeByFilename(route.params.id);
 
 const { ingredients, cookwares, metadata, steps, shoppingList } = recipe;
 
-const title = getFilename(metadata?.import_path);
+const name = getFilename(metadata?.import_path);
 
-const hasRecipeInList = computed(() =>
-  shoppingListStore.hasRecipeInList(title)
-);
+const hasRecipeInList = computed(() => shoppingListStore.hasRecipeInList(name));
 
 function addRecipeToList() {
-  shoppingListStore.addToList({ title, ingredients });
+  shoppingListStore.addToList({ name, ingredients });
 }
 
 const addToListButtonText = computed(() =>
@@ -59,7 +57,7 @@ const hasSource = !!metadata?.source;
 
 <template>
   <div>
-    <Title>{{ title }}</Title>
+    <Title>{{ name }}</Title>
 
     <r-grid columns="8">
       <r-cell span="1-7" span-s="1-4">
@@ -72,10 +70,10 @@ const hasSource = !!metadata?.source;
 
     <article>
       <r-grid columns="8">
-        <r-cell span="1-6" span-s="row">
-          <h1>{{ title }}</h1>
+        <r-cell span="1-5" span-s="row">
+          <h1>{{ name }}</h1>
         </r-cell>
-        <r-cell span="7-8" span-s="row" class="list-button-container">
+        <r-cell span="6-8" span-s="row" class="list-button-container">
           <button @click="addRecipeToList" :disabled="hasRecipeInList">
             <h3>{{ addToListButtonText }}</h3>
           </button>

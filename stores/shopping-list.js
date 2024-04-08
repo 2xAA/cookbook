@@ -5,7 +5,7 @@ export const useShoppingListStore = defineStore(
 
     function addToList(recipe) {
       list.value.push({
-        title: recipe.title,
+        name: recipe.name,
         ingredients: recipe.ingredients.map((ingredient, index) => ({
           done: false,
           index,
@@ -14,21 +14,21 @@ export const useShoppingListStore = defineStore(
       });
     }
 
-    function removeFromList(recipeTitle) {
+    function removeFromList(recipeName) {
       const recipeIndex = list.value.findIndex(
-        (recipe) => recipe.title === recipeTitle
+        (recipe) => recipe.name === recipeName
       );
 
       list.value.splice(recipeIndex, 1);
     }
 
-    const hasRecipeInList = computed(() => (title) => {
-      return !!list.value.find((item) => item.title === title);
+    const hasRecipeInList = computed(() => (name) => {
+      return !!list.value.find((item) => item.name === name);
     });
 
-    const updateIngredientDone = (recipeTitle, ingredientIndex, done) => {
+    const updateIngredientDone = (recipeName, ingredientIndex, done) => {
       const recipeIndex = list.value.findIndex(
-        (recipe) => recipe.title === recipeTitle
+        (recipe) => recipe.name === recipeName
       );
       list.value[recipeIndex].ingredients[ingredientIndex].done = done;
     };

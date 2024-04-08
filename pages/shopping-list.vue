@@ -3,12 +3,12 @@ import { useShoppingListStore } from "../stores/shopping-list.js";
 
 const store = useShoppingListStore();
 
-function check(recipeTitle, ingredientIndex, done) {
-  store.updateIngredientDone(recipeTitle, ingredientIndex, done);
+function check(recipeName, ingredientIndex, done) {
+  store.updateIngredientDone(recipeName, ingredientIndex, done);
 }
 
-function removeFromList(recipeTitle) {
-  store.removeFromList(recipeTitle);
+function removeFromList(recipeName) {
+  store.removeFromList(recipeName);
 }
 
 const searchTerm = ref("");
@@ -17,6 +17,10 @@ function filter(ingredients = []) {
   return ingredients.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
+}
+
+function sort(something, key = "name") {
+  return something.sort((a, b) => a[key].localeCompare(b[key]));
 }
 </script>
 
@@ -38,20 +42,20 @@ function filter(ingredients = []) {
     </r-grid>
 
     <r-grid columns="8" v-for="item in store.list">
-      <r-cell span="1-6" span-s="row">
+      <r-cell span="1-5" span-s="row">
         <h2>
-          <NuxtLink :to="`/recipe/${item.title}`"> {{ item.title }} →</NuxtLink>
+          <NuxtLink :to="`/recipe/${item.name}`"> {{ item.name }} →</NuxtLink>
         </h2>
       </r-cell>
-      <r-cell span="7-8" span-s="row" class="list-button-container">
-        <button @click="removeFromList(item.title)">
+      <r-cell span="6-8" span-s="row" class="list-button-container">
+        <button @click="removeFromList(item.name)">
           <h3>Remove from List</h3>
         </button>
       </r-cell>
       <r-cell span="1-6" span-s="row">
         <fieldset>
           <label
-            v-for="ingredient in filter(item.ingredients)"
+            v-for="ingredient in sort(filter(item.ingredients))"
             :class="{ checked: ingredient.done }"
           >
             <r-grid columns="8">
@@ -59,10 +63,10 @@ function filter(ingredients = []) {
                 <div>
                   <input
                     type="checkbox"
-                    :id="`${item.title}-${ingredient.name}`"
+                    :id="`${item.name}-${ingredient.name}`"
                     :checked="ingredient.done"
                     @change="
-                      check(item.title, ingredient.index, !ingredient.done)
+                      check(item.name, ingredient.index, !ingredient.done)
                     "
                   />
                 </div>
