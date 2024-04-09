@@ -10,6 +10,18 @@ export default defineNuxtConfig({
         lang: "en",
       },
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      meta: [
+        {
+          name: "theme-color",
+          media: "(prefers-color-scheme: light)",
+          content: "white",
+        },
+        {
+          name: "theme-color",
+          media: "(prefers-color-scheme: dark)",
+          content: "black",
+        },
+      ],
     },
   },
   devtools: { enabled: true },
