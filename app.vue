@@ -1,4 +1,5 @@
 <template>
+  <VitePwaManifest />
   <NuxtPage />
 </template>
 
@@ -16,4 +17,10 @@ useHead({
     return title ? `${title} - Cookbook` : "Cookbook";
   },
 });
+
+// onMounted(() => {
+//   document
+//     .querySelector('meta[name="theme-color"]')
+//     .setAttribute("content", "#123456");
+// });
 </script>
