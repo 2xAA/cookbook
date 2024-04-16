@@ -107,11 +107,7 @@ function bindWrapper(item) {
           <!-- </ul> -->
 
           <h2>Ingredients</h2>
-          <ul>
-            <li v-for="ingredient in ingredients">
-              <Ingredient v-bind="ingredient" />
-            </li>
-          </ul>
+          <IngredientsList :ingredients="ingredients" />
 
           <h2 v-if="cookwares?.length">Equipment</h2>
           <ul v-if="cookwares?.length">
