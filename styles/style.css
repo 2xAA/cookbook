@@ -76,6 +76,10 @@ button > * {
   padding: 0;
 }
 
+.list_link-container {
+  text-align: right;
+}
+
 .list-button-container {
   text-align: right;
 }
@@ -84,4 +88,8 @@ button > * {
   .list-button-container {
     text-align: left;
   }
+}
+
+r-grid {
+  --columnGap: var(--baseline);
 }

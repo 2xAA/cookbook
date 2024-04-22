@@ -72,7 +72,7 @@ function bindWrapper(item) {
       <r-cell span="1-7" span-s="1-4">
         <h3><NuxtLink to="/">↩ Home</NuxtLink></h3>
       </r-cell>
-      <r-cell span-s="5-8" style="text-align: right">
+      <r-cell span-s="5-8" class="list_link-container">
         <h3><NuxtLink to="/shopping-list">List →</NuxtLink></h3>
       </r-cell>
     </r-grid>

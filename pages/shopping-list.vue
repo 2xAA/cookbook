@@ -79,7 +79,10 @@ function sort(something, key = "name") {
                 </div>
               </r-cell>
               <r-cell span="5-8">
-                <IngredientQuantity v-bind="ingredient" />
+                <IngredientQuantity
+                  :quantity="ingredient.quantity"
+                  :units="ingredient.units"
+                />
               </r-cell>
             </r-grid>
           </label>

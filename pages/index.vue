@@ -24,8 +24,8 @@ const recipes = computed(() => {
 
 <template>
   <r-grid columns="8">
-    <r-cell span="1-7" span-s="1-5"><h1>Cookbook</h1></r-cell>
-    <r-cell span-s="6-8" style="text-align: right">
+    <r-cell span="1-7" span-s="1-6"><h1>Cookbook</h1></r-cell>
+    <r-cell span-s="7-8" class="list_link-container">
       <h3><NuxtLink to="/shopping-list">List →</NuxtLink></h3>
     </r-cell>
     <r-cell span="row">
@@ -34,16 +34,7 @@ const recipes = computed(() => {
     <r-cell span="row" v-if="!recipes.length">
       <h2>No recipes found for “{{ searchTerm }}”</h2>
     </r-cell>
-    <r-cell
-      span="row"
-      v-for="{
-        ingredients,
-        cookwares,
-        metadata,
-        steps,
-        shoppingList,
-      } in recipes"
-    >
+    <r-cell span="row" v-for="{ metadata } in recipes">
       <h2>
         <NuxtLink :to="`/recipe/${getFilename(metadata.import_path)}`">
           {{ getFilename(metadata.import_path) }} →
