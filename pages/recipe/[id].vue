@@ -54,6 +54,8 @@ if ("time" in metadata) {
 const isVegan = metadata?.vegan === "true";
 const hasSource = !!metadata?.source;
 
+const hasServings = metadata?.servings > 0;
+
 function bindWrapper(item) {
   const props = { ...item };
   if (item.type === "ingredient") {
@@ -89,6 +91,7 @@ function bindWrapper(item) {
         </r-cell>
         <r-cell span="1-2" span-s="row">
           <div v-if="isVegan">Vegan</div>
+          <div v-if="hasServings">Serves: {{ metadata.servings }}</div>
           <div v-if="hasTime">
             ⌚︎ <span v-if="!!hours">{{ hours }}h </span>
             <span v-if="minutes > 0">{{ minutes }}m</span>
@@ -96,6 +99,7 @@ function bindWrapper(item) {
           <div v-if="hasSource">
             <a target="_blank" :href="metadata.source"> Source ↗ </a>
           </div>
+
           <div>
             <a
               target="_blank"
