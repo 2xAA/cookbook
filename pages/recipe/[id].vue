@@ -15,6 +15,7 @@ const stepsComponents = {
   ingredient,
   cookware,
   timer,
+  note: text,
 };
 
 function stripImportPath(object) {
@@ -37,10 +38,15 @@ const steps = computed(() => recipe.value.steps || []);
 
 const name = computed(() => getFilename(metadata.value?.import_path));
 
-const hasRecipeInList = computed(() => shoppingListStore.hasRecipeInList(name.value));
+const hasRecipeInList = computed(() =>
+  shoppingListStore.hasRecipeInList(name.value)
+);
 
 function addRecipeToList() {
-  shoppingListStore.addToList({ name: name.value, ingredients: ingredients.value });
+  shoppingListStore.addToList({
+    name: name.value,
+    ingredients: ingredients.value,
+  });
 }
 
 const addToListButtonText = computed(() =>
@@ -66,13 +72,17 @@ const hasServings = computed(() => (Number(metadata.value?.servings) || 0) > 0);
 const currentServings = ref(1);
 
 // Initialize currentServings when metadata loads or changes
-watch(metadata, (newMeta) => {
-  if (newMeta?.servings) {
-    currentServings.value = Number(newMeta.servings);
-  } else {
-    currentServings.value = 1;
-  }
-}, { immediate: true });
+watch(
+  metadata,
+  (newMeta) => {
+    if (newMeta?.servings) {
+      currentServings.value = Number(newMeta.servings);
+    } else {
+      currentServings.value = 1;
+    }
+  },
+  { immediate: true }
+);
 
 const scale = computed(() => {
   const base = Number(metadata.value?.servings) || 1;
@@ -95,7 +105,8 @@ function bindWrapper(item) {
   }
 
   // Scale time if enabled
-  const scaleTime = metadata.value?.scaleTime === true || metadata.value?.scaleTime === "true";
+  const scaleTime =
+    metadata.value?.scaleTime === true || metadata.value?.scaleTime === "true";
   if (item.type === "timer" && scaleTime) {
     const qValue = Number(props.quantity);
     if (!isNaN(qValue)) {
@@ -105,6 +116,27 @@ function bindWrapper(item) {
 
   return props;
 }
+
+// Group consecutive note steps together
+const groupedSteps = computed(() => {
+  const result = [];
+  for (const step of steps.value) {
+    const isNote = step[0]?.type === "note";
+    const lastGroup = result[result.length - 1];
+
+    if (isNote && lastGroup?.type === "note") {
+      // Combine with previous note group
+      lastGroup.steps.push(step);
+    } else {
+      // Start a new group
+      result.push({
+        type: isNote ? "note" : "step",
+        steps: [step],
+      });
+    }
+  }
+  return result;
+});
 </script>
 
 <template>
@@ -133,11 +165,26 @@ function bindWrapper(item) {
         <r-cell span="1-2" span-s="row">
           <div v-if="isVegan">Vegan</div>
 
-          <div v-if="hasServings" class="servings-control">
-             <button @click="updateServings(-1)" aria-label="Decrease servings">-</button>
-             <span>Serves: {{ currentServings }}</span>
-             <button @click="updateServings(1)" aria-label="Increase servings">+</button>
-          </div>
+          <r-grid
+            columns="2"
+            v-if="hasServings"
+            class="servings-control-container"
+          >
+            <r-cell>
+              <span>Serves: {{ currentServings }}</span>
+            </r-cell>
+            <r-cell class="servings-control">
+              <button
+                @click="updateServings(-1)"
+                aria-label="Decrease servings"
+              >
+                -
+              </button>
+              <button @click="updateServings(1)" aria-label="Increase servings">
+                +
+              </button>
+            </r-cell>
+          </r-grid>
 
           <div v-if="timeData.hasTime">
             ⌚︎ <span v-if="!!timeData.hours">{{ timeData.hours }}h </span>
@@ -171,13 +218,24 @@ function bindWrapper(item) {
         <r-cell span="3-8" span-s="row" class="steps">
           <h2>Steps</h2>
           <ol>
-            <li v-for="step in steps">
-              <component
-                v-for="item in step"
-                :is="stepsComponents[item.type]"
-                v-bind="bindWrapper(item)"
-              ></component>
-            </li>
+            <template v-for="(group, index) in groupedSteps" :key="index">
+              <li v-if="group.type === 'step'">
+                <component
+                  v-for="item in group.steps[0]"
+                  :is="stepsComponents[item.type]"
+                  v-bind="bindWrapper(item)"
+                ></component>
+              </li>
+              <blockquote v-else>
+                <p v-for="(step, stepIndex) in group.steps" :key="stepIndex">
+                  <component
+                    v-for="item in step"
+                    :is="stepsComponents[item.type]"
+                    v-bind="bindWrapper(item)"
+                  ></component>
+                </p>
+              </blockquote>
+            </template>
           </ol>
         </r-cell>
       </r-grid>
@@ -186,17 +244,19 @@ function bindWrapper(item) {
 </template>
 
 <style scoped>
+.servings-control-container {
+  margin: 0;
+}
+
 .servings-control {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 
 .servings-control button {
   background: none;
   border: 1px solid currentColor;
-  border-radius: 50%;
   width: 1.5rem;
   height: 1.5rem;
   display: flex;
@@ -208,6 +268,23 @@ function bindWrapper(item) {
 }
 
 .servings-control button:hover {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+ol {
+  padding-inline-start: 40px;
+}
+
+ol blockquote {
+  margin-bottom: var(--baseline);
+  margin-left: calc(-0.75 * var(--list-indentation));
+  border-left: 2px solid var(--foreground-color);
+  padding-left: calc(0.5 * var(--list-indentation));
+  font-style: italic;
+}
+
+blockquote p {
+  margin: 0;
+  white-space: pre-wrap;
 }
 </style>

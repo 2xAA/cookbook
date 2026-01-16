@@ -1,5 +1,20 @@
 const modules = import.meta.glob("../public/recipes/*.cook");
 
+function transformTextToNotes(recipe) {
+  if (!recipe.steps) return recipe;
+
+  recipe.steps = recipe.steps.map((step) =>
+    step.map((item) => {
+      if (item.type === "text" && item.value.startsWith("> ")) {
+        return { ...item, type: "note", value: item.value.slice(2) };
+      }
+      return item;
+    })
+  );
+
+  return recipe;
+}
+
 async function loadImports() {
   const promises = [];
 
@@ -8,7 +23,7 @@ async function loadImports() {
   }
 
   const recipes = await Promise.all(promises);
-  return recipes.map((mod) => ({ ...mod.default }));
+  return recipes.map((mod) => transformTextToNotes({ ...mod.default }));
 }
 
 export const useRecipesStore = defineStore("recipes", () => {
