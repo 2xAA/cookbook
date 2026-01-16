@@ -1,19 +1,27 @@
 <script setup>
 import Ingredient from "./ingredient.vue";
 
-const { ingredients } = defineProps(["ingredients"]);
+const props = defineProps({
+  ingredients: { type: Array, required: true },
+  scale: { type: Number, default: 1 },
+});
 
-const reducedIngredients = ingredients.reduce((obj, ingredient) => {
-  const { name, quantity, units } = ingredient;
+const reducedIngredients = computed(() => {
+  return props.ingredients.reduce((obj, ingredient) => {
+    const { name, quantity, units } = ingredient;
+    const qValue = Number(quantity);
+    const isNumber = !isNaN(qValue);
+    const scaledQuantity = isNumber ? qValue * props.scale : quantity;
 
-  if (!obj[name]) {
-    obj[name] = { name, quantity, units };
-  } else {
-    obj[name].quantity += quantity;
-  }
+    if (!obj[name]) {
+      obj[name] = { name, quantity: scaledQuantity, units };
+    } else {
+      obj[name].quantity += scaledQuantity;
+    }
 
-  return obj;
-}, {});
+    return obj;
+  }, {});
+});
 </script>
 
 <template>
